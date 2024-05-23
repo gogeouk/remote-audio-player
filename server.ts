@@ -1,20 +1,22 @@
-import { getSoundById } from "./db.ts";
-import { SoundPlayer } from "./SoundPlayer.ts";
-
-// const sound = await getSoundById("collect-coins");
-
-// console.log(`Playing ${sound.name}`);
-
-// const player = new SoundPlayer();
-// await player.play(`./audio/${sound.file}`);
-// player.reportStatus();
+import { getAllSounds, getSoundById } from "./utils/db.ts";
+import { SoundPlayer } from "./utils/soundPlayer.ts";
+import { RouteURL } from "./utils/routeUrl.ts";
 
 Deno.serve({port: 9595},  async (req) => {
-  const url = new URL(req.url);
-  if (url.pathname.substring(0, 11) === "/playsound/") {
-    const soundcode = url.pathname.substring(11);
-    console.log(`playing sound ${soundcode}`);
+  const url = new RouteURL(req.url);
 
+  if (url.startsWith('/list')) {
+    const sounds = await getAllSounds();
+    return new Response(JSON.stringify(sounds), {
+      headers: {
+         "content-type": "text/json; charset=utf-8",
+       },
+    })
+  }
+
+  if (url.startsWith("/playsound")) {
+    const soundcode = url.part(1);
+    console.log(`playing sound ${soundcode}`);
     try {
       const sound = await getSoundById(soundcode);
       const player = new SoundPlayer();
@@ -24,10 +26,11 @@ Deno.serve({port: 9595},  async (req) => {
       console.log("There was an error playing the sound");
       return new Response(`could not play sound`);
     }
-    
-  } else {
-    return new Response("Ambient Audio is live!");
-  }
+  } 
+  
+  // Nothing else returned;
+  return new Response("Ambient Audio is live!");
+});
 
   // console.log("Method:", req.method);
 
@@ -47,6 +50,3 @@ Deno.serve({port: 9595},  async (req) => {
   //       "content-type": "text/plain; charset=utf-8",
   //     },
   //   });
-
-  
-});

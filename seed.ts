@@ -1,4 +1,4 @@
-import { kv } from "./db.ts"
+import { kv } from "./utils/db.ts"
 
 const sounds = [
 	{
@@ -29,6 +29,6 @@ const sounds = [
 ]
 
 for (const sound of sounds) {
-	const result = await kv.set(["soundfiles", sound.id], sound);
+	await kv.set(["soundfiles", sound.id], sound);
 }
 
