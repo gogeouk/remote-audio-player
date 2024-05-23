@@ -1,11 +1,11 @@
 import { getAllSounds, getSoundById } from "./utils/db.ts";
 import { SoundPlayer } from "./utils/soundPlayer.ts";
-import { RouteURL } from "./utils/routeUrl.ts";
+import { Route } from "./utils/route.ts";
 
 Deno.serve({port: 9595},  async (req) => {
-  const url = new RouteURL(req.url);
+  const route = new Route(req.url);
 
-  if (url.startsWith('/list')) {
+  if (route.startsWith('/list')) {
     const sounds = await getAllSounds();
     return new Response(JSON.stringify(sounds), {
       headers: {
@@ -14,8 +14,8 @@ Deno.serve({port: 9595},  async (req) => {
     })
   }
 
-  if (url.startsWith("/playsound")) {
-    const soundcode = url.part(1);
+  if (route.startsWith("/playsound")) {
+    const soundcode = route.part(1);
     console.log(`playing sound ${soundcode}`);
     try {
       const sound = await getSoundById(soundcode);

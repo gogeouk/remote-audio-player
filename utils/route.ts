@@ -1,8 +1,8 @@
-export class RouteURL {
+export class Route {
   private url: URL;
 
-  constructor(urlStr: string) {
-    this.url = new URL(urlStr);
+  constructor(url: string) {
+    this.url = new URL(url);
   }
 
   startsWith(str: string) {
