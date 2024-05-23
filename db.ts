@@ -1,3 +1,5 @@
+import { Sound } from "./SoundPlayer.ts";
+
 export const kv = await Deno.openKv("./sounds.db");
 
 export async function getSounds() {
@@ -9,9 +11,9 @@ export async function getSounds() {
 	return sounds;
 }
 
-export async function getSoundById(id) {
+export async function getSoundById(id: string): Promise<Sound> {
 	const sound = await kv.get(["soundfiles", id]);
-	return sound.value;
+	return sound.value as Sound;
 }
 
 export async function getRandomSound() {

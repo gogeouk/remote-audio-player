@@ -1,20 +1,27 @@
 const successCues = ["Starting playback"];
 const errorCues = ["File not found", "Failed to open"];
 
+export type Sound = {
+	id: string;
+	name: string;
+	file: string;
+}
+
+
 export class SoundPlayer {
-	private output = {stdout: "", stderr: "", code: undefined};
+	private output?: Deno.CommandOutput;
 	
-	async play(filename) {
+	async play(filename: string) {
 		const command = new Deno.Command("mplayer", {
 			args: [filename]
 		});
-		self.output = await command.output();
+		this.output = await command.output();
 	}
 	
 	reportStatus() {
 		const decoder = new TextDecoder();
-		const outString = decoder.decode(self.output.stdout);
-		const errString = decoder.decode(self.output.stderr);
+		const outString = decoder.decode(this.output?.stdout);
+		const errString = decoder.decode(this.output?.stderr);
 
 		successCues.forEach(cue => {
 			if (outString.includes(cue)) {
