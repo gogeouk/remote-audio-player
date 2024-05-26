@@ -1,10 +1,10 @@
 [Unit]
-Description=AmbientAudio
+Description=RemoteAudioPlayer
 After=multi-user.target
 
 [Service]
 User=lee
-WorkingDirectory=/home/lee/ambient-audio
+WorkingDirectory=/home/lee/remote-audio-player
 ExecStart=/home/lee/.deno/bin/deno run --allow-net --allow-read --allow-write --allow-run --unstable-kv server.ts
 Restart=on-failure
 
